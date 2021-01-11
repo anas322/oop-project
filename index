@@ -1,0 +1,172 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace oop_project_Dr_mohamed_hessin
+{
+    class Program
+    {
+        private static readonly Random random = new Random();
+        private static readonly object syncLock = new object();
+        public static int[] player1 = new int[4];
+        public static int[] player2 = new int[4];
+        public static int[] earth = new int[4];
+        public static bool tracker = true;
+        public static bool end = false;
+        public static int[] players(int player_number, ref int[] player)
+        {
+
+            Console.Write("player (" + player_number + ")  ");
+            player = new int[4];
+            for (int i = 0; i < 4; i++)
+            {
+                lock (syncLock)
+                {
+                    player[i] = random.Next(1, 10);
+                }
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                Console.Write(player[i] + " ");
+            }
+            Console.WriteLine();
+            Console.WriteLine();
+            return player;
+        }
+        public static int[] land()
+        {
+            Console.WriteLine();
+            Console.WriteLine("This is 4 random cards in earth");
+            Console.WriteLine("You can choose any card and replace it with your card");
+            Console.WriteLine();
+
+            for (int i = 0; i < 4; i++)
+            {
+                earth[i] = random.Next(1, 10);
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                Console.Write(earth[i] + " ");
+            }
+            Console.WriteLine();
+            Console.WriteLine();
+            return earth;
+        }
+        public static void play(int player_number, ref int[] player)
+        {
+            Console.Write("player (" + player_number + ")  ");
+            Console.WriteLine();
+            int temp = 0;
+            Console.WriteLine("please inter your index number from your card");
+            int index = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("please inter your index number from earth");
+            int indexEarth = Convert.ToInt32(Console.ReadLine());
+
+            temp = player[index];
+            player[index] = earth[indexEarth];
+            earth[indexEarth] = temp;
+
+            Console.Write("player (" + "1" + ")  ");
+            for (int k = 0; k < 4; k++)
+            {
+                Console.Write(player1[k] + " ");
+
+            }
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.Write("player (" + "2" + ")  ");
+            for (int k = 0; k < 4; k++)
+            {
+                Console.Write(player2[k] + " ");
+
+            }
+            Console.WriteLine();
+            Console.WriteLine();
+
+            Console.WriteLine("4 Random Card");
+
+            for (int i = 0; i < 4; i++)
+            {
+                earth[i] = random.Next(1, 10);
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                Console.Write(earth[i] + " ");
+            }
+
+            Console.WriteLine();
+            Console.WriteLine();
+
+
+
+        }
+
+        public static void check(ref int[] player)
+        {
+
+            for (int k = 1; k < 4; k++)
+            {
+
+                if (player[0] != player[k])
+                {
+                    
+                    tracker = false;
+                    break;
+
+                }
+            }
+            if (tracker == true)
+            {
+                Console.WriteLine("CONGRATOLATION YOU ARE THE WINNER!");
+                end = true;
+
+            }
+            tracker = true;
+
+        }
+
+       
+
+
+
+        static void Main(string[] args)
+        {
+            players(1, ref player1);
+            players(2, ref player2);
+            
+
+            land();
+
+            while (end == false)
+            {
+
+
+                play(1, ref player1);
+
+                check(ref player1);
+
+                if (end == true)
+                { break; }
+
+
+                play(2, ref player2);
+
+                check(ref player2);
+
+
+
+                if (end == true)
+                { break; }
+               
+
+
+            }
+
+
+            Console.ReadLine();
+        }
+
+    }
+}
